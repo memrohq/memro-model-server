@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  model-server:
+    build: .
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./models:/app/models
+    restart: always
+    # Ensure memory limits if running on a constrained CPU environment
+    deploy:
+      resources:
+        limits:
+          memory: 4G
