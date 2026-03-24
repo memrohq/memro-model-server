@@ -1,10 +1,28 @@
 from huggingface_hub import hf_hub_download
 import os
+from dotenv import load_dotenv
 
-repo_id = "Qwen/Qwen2.5-Coder-1.5B-Instruct-GGUF"
-filename = "qwen2.5-coder-1.5b-instruct-q4_k_m.gguf"
-local_dir = "/Users/freya/Documents/work/hackit/memrohq/memro-model-server/models"
+# Load .env if exists
+load_dotenv()
 
-print(f"Downloading {filename} from {repo_id}...")
-hf_hub_download(repo_id=repo_id, filename=filename, local_dir=local_dir)
-print("Download complete.")
+REPO_ID = os.getenv("REPO_ID", "TheBloke/deepseek-coder-6.7B-instruct-GGUF")
+FILENAME = os.getenv("MODEL_FILE", "deepseek-coder-6.7b-instruct.Q4_K_M.gguf")
+LOCAL_DIR = os.getenv("LOCAL_DIR", "./models")
+
+def download():
+    print(f"🚀 Downloading {FILENAME} from {REPO_ID}...")
+    print(f"📁 Target Directory: {os.path.abspath(LOCAL_DIR)}")
+    
+    try:
+        path = hf_hub_download(
+            repo_id=REPO_ID, 
+            filename=FILENAME, 
+            local_dir=LOCAL_DIR,
+            local_dir_use_symlinks=False
+        )
+        print(f"✅ Download complete: {path}")
+    except Exception as e:
+        print(f"❌ Error downloading model: {e}")
+
+if __name__ == "__main__":
+    download()
